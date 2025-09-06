@@ -14,6 +14,7 @@ function App() {
     <UserProvider>
       <Router>
         <Navbar />
+
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/Myorders" element={<MyOrders />} />

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useUser } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../context/CartContext";
-
+import BackButton from "../components/BackButton/BackButton";
 export default function Cart() {
   const { currentUser } = useUser();
   const { cart, removeFromCart } = useCart();
@@ -21,9 +21,11 @@ export default function Cart() {
   const total = cart.reduce((sum, item) => sum + (item.price || 0), 0);
 
   return (
-    <div className="max-w-2xl mx-auto p-6">
+    <div className=" max-w-2xl mx-auto p-6 ">
+      <div className="flex justify-between items-center">
       <h2 className="text-2xl font-bold mb-4">Your Cart 🛒</h2>
-
+      <BackButton />
+      </div>
       {cart.length === 0 ? (
         <p className="text-gray-600">Your cart is empty</p>
       ) : (

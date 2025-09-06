@@ -1,4 +1,3 @@
-// src/components/FoodFeed/FoodFeed.jsx
 import { useEffect, useState } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebase";
@@ -7,6 +6,7 @@ import { useCart } from "../../context/CartContext";
 export default function FoodFeed() {
   const { cart, addToCart } = useCart();
   const [foods, setFoods] = useState([]);
+  const [showToast, setShowToast] = useState(false);
 
   useEffect(() => {
     const fetchFoods = async () => {
@@ -38,6 +38,12 @@ export default function FoodFeed() {
     fetchFoods();
   }, []);
 
+  const handleAddToCart = (food) => {
+    addToCart(food);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 1500); // hide after 1.5s
+  };
+
   return (
     <div className="max-w-6xl mx-auto px-4 py-6">
       <h2 className="text-3xl font-bold mb-8 text-center">Food Feed 🍔</h2>
@@ -51,32 +57,32 @@ export default function FoodFeed() {
           foods.map((food) => (
             <div
               key={food.id}
-              className="p-5 bg-white border rounded-2xl shadow-md hover:shadow-xl transition duration-300 flex flex-col, feed-grid"
+              className="p-5 rounded-2xl shadow-md hover:shadow-xl transition bg-white flex flex-col justify-between"
             >
-              {/* Image Placeholder */}
-              <div className="w-full h-40 bg-gray-100 rounded-lg mb-4 flex items-center justify-center">
-                <span className="text-gray-400 text-sm">Food Image</span>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">{food.name}</h3>
+                <p className="text-sm text-gray-600 mt-1">{food.description}</p>
               </div>
-
-              <h3 className="text-lg font-semibold">{food.name}</h3>
-              <p className="text-gray-600 flex-grow">{food.description}</p>
-              <p className="mt-2 font-bold text-blue-700 text-lg">
-                ₹{food.price}
-              </p>
-              <p className="text-sm text-gray-500">
-                by {food.restaurantName}
-              </p>
-
-              <button
-                onClick={() => addToCart(food)}
-                className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-medium transition"
-              >
-                Add to Cart
-              </button>
+              <div className="mt-4 flex items-center justify-between">
+                <p className="text-lg font-bold text-red-500">₹{food.price}</p>
+                <button
+                  onClick={() => handleAddToCart(food)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm font-medium"
+                >
+                  Add to Cart
+                </button>
+              </div>
             </div>
           ))
         )}
       </div>
+
+      {/* Toast notification */}
+      {showToast && (
+        <div className="fixed bottom-5 right-5 bg-green-500 text-white px-4 py-2 rounded shadow-lg animate-bounce">
+          Added to cart! ({cart.length} items)
+        </div>
+      )}
     </div>
   );
 }
