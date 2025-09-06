@@ -1,0 +1,58 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #ff5a5f;
+  padding: 10px 20px;
+  color: #fff;
+}
+
+.navbar .logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #fff;
+  text-decoration: none;
+}
+
+.navbar a {
+  margin-left: 15px;
+  color: #fff;
+  text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+}
+
+.account-wrapper {
+  position: relative;
+}
+
+.account-btn {
+  background: #fff;
+  color: #ff5a5f;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.account-dropdown-container {
+  position: absolute;
+  top: 40px;
+  right: 0;
+  z-index: 1000;
+  width: 250px;
+}
+
+.logout-btn {
+  margin-top: 5px;
+  width: 100%;
+  background: #ff5a5f;
+  color: #fff;
+  border: none;
+  padding: 5px 0;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,64 @@
+.dropdown-panel {
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  width: 300px;
+  border-radius: 8px;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 4px 16px,
+    rgba(17, 17, 26, 0.1) 0px 8px 24px, rgba(17, 17, 26, 0.1) 0px 16px 56px;
+  padding: 1rem;
+  z-index: 1000;
+  color: black;
+}
+
+.close-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  background: transparent;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.profile-details p {
+  margin: 6px 0;
+}
+
+.edit-form input,
+.edit-form textarea {
+  width: 100%;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:first-of-type {
+  background: #4caf50;
+  color: white;
+}
+
+button:last-of-type {
+  background: #f44336;
+  color: white;
+  width: fit-content;
+  padding: 8px;
+  justify-content: center;
+}
+.edit-btn {
+  align-self: center;
+  justify-self: center;
+}
+.logout-btn {
+  position: relative;
+  left: 130px;
+}
