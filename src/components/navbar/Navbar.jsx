@@ -9,6 +9,11 @@ export default function Navbar() {
   const { cart } = useCart();
   const [showDropdown, setShowDropdown] = useState(false);
 
+  // Calculate total quantity in cart safely
+  const cartCount = Array.isArray(cart)
+    ? cart.reduce((total, item) => total + item.quantity, 0)
+    : 0;
+
   return (
     <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white">
       <Link to="/" className="text-xl font-bold text-red-500">
@@ -32,9 +37,10 @@ export default function Navbar() {
               d="M3 3h2l.4 2M7 13h14l-1.35 6.75a1 1 0 01-.98.75H6a1 1 0 01-1-.75L3 6H21"
             />
           </svg>
-          {cart.length > 0 && (
+
+          {cartCount > 0 && (
             <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold rounded-full px-2">
-              {cart.length}
+              {cartCount}
             </span>
           )}
         </Link>
@@ -49,13 +55,21 @@ export default function Navbar() {
           </Link>
         ) : (
           <div className="relative">
-            <button onClick={() => setShowDropdown(!showDropdown)}>
-              <img
-                src={currentUser.photoURL || "https://via.placeholder.com/40"}
-                alt="profile"
-                className="w-10 h-10 rounded-full"
-              />
+            <button
+              className="w-10 h-10 rounded-full bg-gray-300 flex items-center justify-center text-white hover:bg-gray-400 transition"
+              onClick={() => setShowDropdown(!showDropdown)}
+            >
+              {currentUser.photoURL ? (
+                <img
+                  src={currentUser.photoURL}
+                  alt="profile"
+                  className="w-10 h-10 rounded-full object-cover"
+                />
+              ) : (
+                <span className="text-xl font-semibold">👤</span>
+              )}
             </button>
+
             {showDropdown && (
               <AccountDropdown onClose={() => setShowDropdown(false)} />
             )}
