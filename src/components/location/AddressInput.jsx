@@ -77,7 +77,9 @@ export default function AddressInput({ onSelectAddress }) {
 
         setAddresses((prev) =>
           prev.map((addr) =>
-            addr.id === editingId ? { id: editingId, ...formData, lat: coords.lat, lng: coords.lng } : addr
+            addr.id === editingId
+              ? { id: editingId, ...formData, lat: coords.lat, lng: coords.lng }
+              : addr
           )
         );
         showToast("Address updated successfully.");
@@ -90,14 +92,32 @@ export default function AddressInput({ onSelectAddress }) {
             lng: coords.lng,
           }
         );
-        const newAddress = { id: docRef.id, ...formData, lat: coords.lat, lng: coords.lng };
+        const newAddress = {
+          id: docRef.id,
+          ...formData,
+          lat: coords.lat,
+          lng: coords.lng,
+        };
         setAddresses((prev) => [...prev, newAddress]);
         showToast("New address added successfully.");
       }
 
       setSelectedId(editingId || formData.id);
-      onSelectAddress({ id: editingId || formData.id, ...formData, lat: coords.lat, lng: coords.lng });
-      setFormData({ name: "", phone: "", house: "", street: "", village: "", city: "", pin: "" });
+      onSelectAddress({
+        id: editingId || formData.id,
+        ...formData,
+        lat: coords.lat,
+        lng: coords.lng,
+      });
+      setFormData({
+        name: "",
+        phone: "",
+        house: "",
+        street: "",
+        village: "",
+        city: "",
+        pin: "",
+      });
       setShowForm(false);
       setEditingId(null);
     } catch (err) {
@@ -124,9 +144,7 @@ export default function AddressInput({ onSelectAddress }) {
   return (
     <div>
       {toastMsg && (
-        <div className="bg-green-500 text-white p-2 rounded mb-4">
-          {toastMsg}
-        </div>
+        <div className="bg-green-500 text-white p-2 rounded mb-4">{toastMsg}</div>
       )}
 
       {addresses.length > 0 && (
@@ -137,11 +155,14 @@ export default function AddressInput({ onSelectAddress }) {
             <div
               key={address.id}
               className={`p-4 rounded border mb-2 ${
-                selectedId === address.id ? "border-blue-500 bg-blue-50" : "bg-white"
+                selectedId === address.id
+                  ? "border-blue-500 bg-blue-50"
+                  : "bg-white"
               }`}
             >
               {editingId === address.id ? (
                 <form onSubmit={handleFormSubmit} className="space-y-2">
+                  {/* form inputs same as before */}
                   <input
                     type="text"
                     name="name"
@@ -254,7 +275,15 @@ export default function AddressInput({ onSelectAddress }) {
           onClick={() => {
             setShowForm(true);
             setEditingId(null);
-            setFormData({ name: "", phone: "", house: "", street: "", village: "", city: "", pin: "" });
+            setFormData({
+              name: "",
+              phone: "",
+              house: "",
+              street: "",
+              village: "",
+              city: "",
+              pin: "",
+            });
           }}
         >
           Add New Address
@@ -262,7 +291,11 @@ export default function AddressInput({ onSelectAddress }) {
       )}
 
       {showForm && !editingId && (
-        <form onSubmit={handleFormSubmit} className="space-y-2 bg-gray-50 p-4 rounded shadow-md">
+        <form
+          onSubmit={handleFormSubmit}
+          className="space-y-2 bg-gray-50 p-4 rounded shadow-md"
+        >
+          {/* inputs same as before */}
           <input
             type="text"
             name="name"
@@ -326,13 +359,33 @@ export default function AddressInput({ onSelectAddress }) {
             className="w-full p-2 border rounded"
           />
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded mt-2 w-full"
-          >
-            {loading ? "Saving..." : "Save Address"}
-          </button>
+          <div className="flex space-x-2 mt-2">
+            <button
+              type="submit"
+              disabled={loading}
+              className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded w-1/2"
+            >
+              {loading ? "Saving..." : "Save Address"}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setShowForm(false);
+                setFormData({
+                  name: "",
+                  phone: "",
+                  house: "",
+                  street: "",
+                  village: "",
+                  city: "",
+                  pin: "",
+                });
+              }}
+              className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded w-1/2"
+            >
+              Cancel
+            </button>
+          </div>
         </form>
       )}
     </div>
