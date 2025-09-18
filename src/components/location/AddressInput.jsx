@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { collection, addDoc, getDocs, doc, updateDoc } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  doc,
+  updateDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import { db } from "../../firebase";
 import { useUser } from "../../context/UserContext";
 import { getCoordinatesFromAddress } from "../../utils/deliveryDistance";
@@ -68,7 +75,13 @@ export default function AddressInput({ onSelectAddress }) {
       const coords = await getCoordinatesFromAddress(fullAddress);
 
       if (editingId) {
-        const docRef = doc(db, "users", currentUser.uid, "addresses", editingId);
+        const docRef = doc(
+          db,
+          "users",
+          currentUser.uid,
+          "addresses",
+          editingId
+        );
         await updateDoc(docRef, {
           ...formData,
           lat: coords.lat,
@@ -128,6 +141,20 @@ export default function AddressInput({ onSelectAddress }) {
     }
   };
 
+  const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this address?"))
+      return;
+
+    try {
+      await deleteDoc(doc(db, "users", currentUser.uid, "addresses", id));
+      setAddresses((prev) => prev.filter((addr) => addr.id !== id));
+      showToast("Address deleted successfully.");
+    } catch (err) {
+      console.error("Error deleting address:", err.message);
+      alert("Failed to delete address.");
+    }
+  };
+
   const handleEdit = (address) => {
     setEditingId(address.id);
     setFormData({
@@ -144,7 +171,9 @@ export default function AddressInput({ onSelectAddress }) {
   return (
     <div>
       {toastMsg && (
-        <div className="bg-green-500 text-white p-2 rounded mb-4">{toastMsg}</div>
+        <div className="bg-green-500 text-white p-2 rounded mb-4">
+          {toastMsg}
+        </div>
       )}
 
       {addresses.length > 0 && (
@@ -245,23 +274,31 @@ export default function AddressInput({ onSelectAddress }) {
                 </form>
               ) : (
                 <div className="flex items-center justify-between">
-                  <div>
+                  <div className="ml-1">
                     <input
                       type="radio"
                       name="selectedAddress"
                       checked={selectedId === address.id}
                       onChange={() => handleSelect(address)}
-                      className="mr-2"
+                      className="mr-2 "
                     />
-                    <span>{`${address.house}, ${address.street}, ${address.village}, ${address.city} - ${address.pin}`}</span>
+                    <span className="">{`${address.house}, ${address.street}, ${address.village}, ${address.city} - ${address.pin}`}</span>
                   </div>
-
-                  <button
-                    onClick={() => handleEdit(address)}
-                    className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition-colors duration-200"
-                  >
-                    Edit
-                  </button>
+                  <div className=" gap-2 ml-4 ">
+                    <button
+                      onClick={() => handleEdit(address)}
+                      className="bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition-colors duration-200 m-2"
+                    >
+                      Edit
+                    </button>
+                    {/* Delete */}
+                    <button
+                      onClick={() => handleDelete(address.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white font-semibold py-1 px-3 rounded-lg shadow-md transition-colors duration-200"
+                    >
+                      Delete
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
